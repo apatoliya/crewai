@@ -7,10 +7,18 @@ os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
 os.environ['LANGCHAIN_TRACING_V2'] = 'true'
 
 from crewai import Agent, Task, Crew
-from langchain_openai import ChatOpenAI
+from crewai import LLM
 
-# Initialize the LLM
-llm = ChatOpenAI(model="gpt-4")
+llm = LLM(
+    model="openai/gpt-4", # call model by provider/model_name
+    temperature=0.8,
+    max_tokens=150,
+    top_p=0.9,
+    frequency_penalty=0.1,
+    presence_penalty=0.1,
+    stop=["END"],
+    seed=42
+)
 
 # Define your agents with roles and goals
 researcher = Agent(
