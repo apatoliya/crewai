@@ -44,6 +44,12 @@ research_task = Task(
     agent=researcher
 )
 
+analysis_task = Task(
+    description='Analyze potential business applications of recent AI advancements',
+    expected_output='A detailed report on how new AI technologies can be applied in various industries',
+    agent=researcher
+)
+
 writing_task = Task(
     description='Write a blog post explaining how large language models work to a general audience',
     expected_output='A well-structured, engaging blog post of 500 words that explains LLMs in simple terms',
@@ -53,7 +59,7 @@ writing_task = Task(
 # Create a crew with your agents and tasks
 crew = Crew(
     agents=[researcher, writer],
-    tasks=[research_task, writing_task],
+    tasks=[research_task, analysis_task, writing_task],
     verbose=True
 )
 
