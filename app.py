@@ -3,6 +3,7 @@ import logging
 from typing import List
 from dotenv import load_dotenv
 from crewai import Agent, Task, Crew, LLM
+from crewai_tools import SerperDevTool
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -22,6 +23,7 @@ def load_environment():
     os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY')
     os.environ['LANGCHAIN_API_KEY'] = os.getenv('LANGCHAIN_API_KEY')
     os.environ['LANGCHAIN_TRACING_V2'] = 'true'
+    os.environ['SERPER_API_KEY'] = os.getenv('SERPER_API_KEY')
     
     logger.info("Environment variables loaded successfully")
 
@@ -37,6 +39,7 @@ def initialize_llm() -> LLM:
         stop=["END"],
         seed=42
     )
+serper_tool = SerperDevTool(name="serper_tool", description="A tool for searching the web for the latest news and information",n=2)
 
 def create_agents(llm: LLM) -> List[Agent]:
     """Create and return a list of agents with defined roles."""
@@ -45,7 +48,8 @@ def create_agents(llm: LLM) -> List[Agent]:
         goal='Discover and analyze cutting-edge developments in AI technology',
         backstory='You are an expert technology researcher with deep knowledge of artificial intelligence trends',
         verbose=True,
-        llm=llm
+        llm=llm,
+        tools=[serper_tool]
     )
     
     writer = Agent(
@@ -53,7 +57,7 @@ def create_agents(llm: LLM) -> List[Agent]:
         goal='Create clear and engaging content explaining complex AI concepts',
         backstory='You are a skilled technical writer who specializes in making complex topics accessible',
         verbose=True,
-        llm=llm
+        llm=llm,
     )
     
     return [researcher, writer]

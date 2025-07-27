@@ -1,3 +1,4 @@
 crewai
 langchain
 langchain_openai
+crewai-tools
